@@ -27,5 +27,8 @@ Use the space to list the decomposition or outline of your program.  Next to eac
 What will be done	Who will do it
  2, 3	Ethan Brown
 1, 4	Armoni Myles
-	
+
+ The states and electoral votess have been pulled from this webstie. 
+ https://www.worldatlas.com/articles/states-by-electoral-votes.html
+ washington is displayed twice the one we went with was just washington not the washington D.C.
 	
