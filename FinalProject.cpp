@@ -8,17 +8,20 @@
 
 using namespace std;
 const int STATES = 50;
+const int ZERO = 0;
+const int FIVE = 5;
+const int FORTYFIVE = 45;
 void Introduction(char c, string message)
 {
-    cout << setfill(c) << setw(50) << ' ' << endl;
-    cout << setw(45) << message << setw(5) << ' ' << endl;
-    cout << setfill(c) << setw(50) << ' ' << endl;
+    cout << setfill(c) << setw(STATES) << ' ' << endl;
+    cout << setw(FORTYFIVE) << message << setw(FIVE) << ' ' << endl;
+    cout << setfill(c) << setw(STATES) << ' ' << endl;
     // The options in the while list need to be added
     cout << "To input a state, enter '\S\'" << endl;
     cout << "To check your total, enter '\T\'" << endl;
     cout << "To check your opponents' total, enter '\O\'" << endl;
     cout << "To end the race, enter '\Q\'" << endl;
-    cout << setw(50) << ' ' << endl;
+    cout << setw(STATES) << ' ' << endl;
 }
 
 //Loading the array with state names from a file
@@ -30,7 +33,7 @@ bool readFile(string fileName, string Electoral, int e[], string states[])
     {
         return false;
     }
-    for (int i = 0; i < 50; i++)
+    for (int i = ZERO; i < STATES; i++)
     {
         getline(statesData, states[i]);
         electoral >> e[i];
@@ -42,10 +45,10 @@ bool readFile(string fileName, string Electoral, int e[], string states[])
 void SelectState(int e[], string s[], int u[])
 {
     string choices;
-    int count = 0;
+    int count = ZERO;
     cout << "Please select a state: ", cin >> choices;
     //getline(cin, choices);
-    for (int line = 0; line < STATES; line++)
+    for (int line = ZERO; line < STATES; line++)
     {
         if (s[line] == choices)
         {
@@ -58,7 +61,7 @@ void SelectState(int e[], string s[], int u[])
     }
 
     u[count] += e[count];
-    e[count] = 0;
+    e[count] = ZERO;
 
 }
 void Total_Electoral(int e[], string s[], int u[])
@@ -66,7 +69,7 @@ void Total_Electoral(int e[], string s[], int u[])
     int Points_User = {};
     int Opponents_Points = {};
     int Total = {};
-    for (int row = 0; row < STATES; row++)
+    for (int row = ZERO; row < STATES; row++)
     {
         Points_User += u[row];
         Opponents_Points += e[row];
@@ -90,7 +93,7 @@ void Total_Electoral(int e[], string s[], int u[])
 void User_Total(int u[])
 {
     int Total = {};
-    for (int row = 0; row < STATES; row++)
+    for (int row = ZERO; row < STATES; row++)
     {
         Total += u[row];
     }
@@ -100,7 +103,7 @@ void User_Total(int u[])
 void OTotal(int e[])
 {
     int Total = {};
-    for (int row = 0; row < STATES; row++)
+    for (int row = ZERO; row < STATES; row++)
     {
         Total += e[row];
     }
@@ -142,6 +145,10 @@ int main(int argc, char* argv[])
         else if (choice == Opponent || choice == lower_Opponent)
         {
             OTotal(Electoral);
+        }
+        else 
+        {
+            cout << "Please use one of the choices" << endl;
         }
     }
 }
