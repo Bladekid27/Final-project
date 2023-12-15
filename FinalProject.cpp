@@ -14,6 +14,11 @@ void Introduction(char c, string message)
     cout << setw(45) << message << setw(5) << ' ' << endl;
     cout << setfill(c) << setw(50) << ' ' << endl;
     // The options in the while list need to be added
+    cout << "To input a state, enter '\S\'" << endl;
+    cout << "To check your total, enter '\T\'" << endl;
+    cout << "To check your opponents' total, enter '\O\'" << endl;
+    cout << "To end the race, enter '\Q\'" << endl;
+    cout << setw(50) << ' ' << endl;
 }
 
 //Loading the array with state names from a file
@@ -34,14 +39,15 @@ bool readFile(string fileName, string Electoral, int e[], string states[])
     }
     return true;
 }
-void SelectState(int e[], string s[],int u[])
+void SelectState(int e[], string s[], int u[])
 {
-    string choice;
+    string choices;
     int count = 0;
-    cout << "Please select a state every state starts with a capital letter ", cin >> choice;
+    cout << "Please select a state: ", cin >> choices;
+    //getline(cin, choices);
     for (int line = 0; line < STATES; line++)
     {
-        if (s[line] == choice)
+        if (s[line] == choices)
         {
             line += STATES;
         }
@@ -58,27 +64,27 @@ void SelectState(int e[], string s[],int u[])
 void Total_Electoral(int e[], string s[], int u[])
 {
     int Points_User = {};
-    int Oponnents_Points = {};
+    int Opponents_Points = {};
     int Total = {};
     for (int row = 0; row < STATES; row++)
     {
         Points_User += u[row];
-        Oponnents_Points += e[row];
+        Opponents_Points += e[row];
     }
 
-    if (Points_User > Oponnents_Points)
+    if (Points_User > Opponents_Points)
     {
-        Total += Points_User - Oponnents_Points;
-        cout << "You've won with a total of " << Points_User << " Your in the lead by " << Total << " Your opponent is at " << Oponnents_Points << endl;
+        Total += Points_User - Opponents_Points;
+        cout << "You've won with a total of " << Points_User << ". You're in the lead by " << Total << " and your opponent has " << Opponents_Points << "votes." << endl;
     }
-    else if (Points_User < Oponnents_Points)
+    else if (Points_User < Opponents_Points)
     {
-        Total += Oponnents_Points - Points_User;
-        cout << "You lossed with a total of " << Points_User << " You've lost by " << Total << " Your opponent is at " << Oponnents_Points << endl;
+        Total += Opponents_Points - Points_User;
+        cout << "You lost with a total of " << Points_User << " votes. You've lost by " << Total << " and your opponent has " << Opponents_Points << " votes." << endl;
     }
     else
     {
-        cout << "You are currently tied you have " << Points_User <<" Your opponent has " << Oponnents_Points << endl;
+        cout << "You are currently tied. You have " << Points_User << " and your opponent has " << Opponents_Points << " votes." << endl;
     }
 }
 void User_Total(int u[])
@@ -88,7 +94,7 @@ void User_Total(int u[])
     {
         Total += u[row];
     }
-    cout << "You currently have a total of " << Total << endl;
+    cout << "You currently have a total of: " << Total << " votes." << endl;
 }
 
 void OTotal(int e[])
@@ -98,41 +104,44 @@ void OTotal(int e[])
     {
         Total += e[row];
     }
-    cout << "Your opponent currently has a total of " << Total << endl;
+    cout << "Your opponent currently has a total of: " << Total << " votes." << endl;
 }
 int main(int argc, char* argv[])
 {
     string choice;
-    string Ttotal = "T";
+    string T_total = "T";
+    string lower_Ttotal = "t";
     string StateChoice = "S";
+    string lower_StateChoice = "s";
     string Opponent = "O";
+    string lower_Opponent = "o";
     const string QUIT = "Q";
+    const string lower_QUIT = "q";
     string StateList[STATES] = {};
     int Electoral[STATES] = {};
     int UserTotal[STATES] = {};
+
     Introduction('*', "Welcome to the 2024 Presidential Election");
     readFile("ListofStates.txt", "electoral.txt", Electoral, StateList);
-    while (choice != QUIT)
+    while (choice != QUIT && choice != lower_QUIT)
     {
-        cout << "Please make a selection uppercase only ", cin >> choice;
-      
-        if (choice == StateChoice)
+        cout << "Please make a selection: ", cin >> choice;
+
+        if (choice == StateChoice || choice == lower_StateChoice)
         {
-            SelectState(Electoral, StateList,UserTotal);
+            SelectState(Electoral, StateList, UserTotal);
         }
-        else if (choice == QUIT)
+        else if (choice == QUIT || choice == lower_QUIT)
         {
             Total_Electoral(Electoral, StateList, UserTotal);
         }
-        else if (choice == Ttotal)
+        else if (choice == T_total || choice == lower_Ttotal)
         {
             User_Total(UserTotal);
         }
-        else if (choice == Opponent)
+        else if (choice == Opponent || choice == lower_Opponent)
         {
             OTotal(Electoral);
         }
     }
 }
-
-
