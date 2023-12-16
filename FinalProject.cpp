@@ -11,25 +11,34 @@ const int STATES = 50;
 const int ZERO = 0;
 const int FIVE = 5;
 const int FORTYFIVE = 45;
-void Introduction(char c, string message)
+
+
+    // Displays the title and instructions to the program.
+    void Introduction(char c, string message)
 {
     cout << setfill(c) << setw(STATES) << ' ' << endl;
     cout << setw(FORTYFIVE) << message << setw(FIVE) << ' ' << endl;
     cout << setfill(c) << setw(STATES) << ' ' << endl;
-    // The options in the while list need to be added
-    cout << "To input a state, enter '\S\'" << endl;
-    cout << "To check your total, enter '\T\'" << endl;
-    cout << "To check your opponents' total, enter '\O\'" << endl;
-    cout << "To end the race, enter '\Q\'" << endl;
-    cout << setw(STATES) << ' ' << endl;
+
+        cout << "To input a state, enter 'S'" << endl;
+
+    cout << "To check your total, enter 'T'" << endl;
+
+    cout << "To check your opponents' total, enter 'O'" << endl;
+
+    cout << "To end the race, enter 'Q'" << endl;
+
+        // The options in the while list need to be added
+        cout << setw(STATES) << ' ' << endl;
 }
 
-//Loading the array with state names from a file
+// Loading the array with state names from a file.
 bool readFile(string fileName, string Electoral, int e[], string states[])
 {
     ifstream statesData(fileName);
     ifstream electoral(Electoral);
-    if (!statesData && electoral)
+
+    if (!statesData || !electoral)
     {
         return false;
     }
@@ -37,33 +46,34 @@ bool readFile(string fileName, string Electoral, int e[], string states[])
     {
         getline(statesData, states[i]);
         electoral >> e[i];
-        // Test to see if the data was loaded correctly. 
         //cout << states[i] << endl;
     }
     return true;
 }
+// Allows user to select a select a state from the file.
 void SelectState(int e[], string s[], int u[])
 {
     string choices;
     int count = ZERO;
-    cout << "Please select a state: ", cin >> choices;
-    //getline(cin, choices);
-    for (int line = ZERO; line < STATES; line++)
-    {
-        if (s[line] == choices)
+        cout << "Please select a state: ";
+    getline(cin, choices);
+        for (int line = ZERO; line < STATES; line++)
         {
-            line += STATES;
+            if (s[line] == choices)
+            {
+                line += STATES;
+            }
+            else
+            {
+                count++;
+            }
         }
-        else
-        {
-            count++;
-        }
-    }
 
     u[count] += e[count];
     e[count] = ZERO;
 
 }
+// Calculates the total of votes the User and Opponent have.
 void Total_Electoral(int e[], string s[], int u[])
 {
     int Points_User = {};
@@ -90,6 +100,8 @@ void Total_Electoral(int e[], string s[], int u[])
         cout << "You are currently tied. You have " << Points_User << " and your opponent has " << Opponents_Points << " votes." << endl;
     }
 }
+
+// Displays the current User total.
 void User_Total(int u[])
 {
     int Total = {};
@@ -100,6 +112,7 @@ void User_Total(int u[])
     cout << "You currently have a total of: " << Total << " votes." << endl;
 }
 
+// Displays the current Opponent Total.
 void OTotal(int e[])
 {
     int Total = {};
@@ -109,6 +122,7 @@ void OTotal(int e[])
     }
     cout << "Your opponent currently has a total of: " << Total << " votes." << endl;
 }
+
 int main(int argc, char* argv[])
 {
     string choice;
@@ -128,7 +142,9 @@ int main(int argc, char* argv[])
     readFile("ListofStates.txt", "electoral.txt", Electoral, StateList);
     while (choice != QUIT && choice != lower_QUIT)
     {
-        cout << "Please make a selection: ", cin >> choice;
+        cout << "Please make a selection: ";
+        //cin >> choice;
+        getline(cin, choice);
 
         if (choice == StateChoice || choice == lower_StateChoice)
         {
@@ -146,7 +162,7 @@ int main(int argc, char* argv[])
         {
             OTotal(Electoral);
         }
-        else 
+        else
         {
             cout << "Please use one of the choices" << endl;
         }
