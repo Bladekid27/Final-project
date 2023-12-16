@@ -8,29 +8,45 @@
 
 using namespace std;
 const int STATES = 50;
+const int ZERO = 0;
+const int FIVE = 5;
+const int FORTYFIVE = 45;
+
+// Displays the title and instructions to the program.
 void Introduction(char c, string message)
 {
-    cout << setfill(c) << setw(50) << ' ' << endl;
-    cout << setw(45) << message << setw(5) << ' ' << endl;
-    cout << setfill(c) << setw(50) << ' ' << endl;
-    // The options in the while list need to be added
-    cout << "To input a state, enter '\S\'" << endl;
-    cout << "To check your total, enter '\T\'" << endl;
-    cout << "To check your opponents' total, enter '\O\'" << endl;
-    cout << "To end the race, enter '\Q\'" << endl;
-    cout << setw(50) << ' ' << endl;
+    cout << setfill(c) << setw(STATES) << ' ' << endl;
+    cout << setw(FORTYFIVE) << message << setw(FIVE) << ' ' << endl;
+    cout << setfill(c) << setw(STATES) << ' ' << endl;
+
+    // These escape sequences are incorrect. See complier warnings.
+    //cout << "To input a state, enter '\S\'" << endl;
+    cout << "To input a state, enter 'S'" << endl;
+
+    //cout << "To check your total, enter '\T\'" << endl;
+    cout << "To check your total, enter 'T'" << endl;
+
+    //cout << "To check your opponents' total, enter '\O\'" << endl;
+    cout << "To check your opponents' total, enter 'O'" << endl;
+
+    //cout << "To end the race, enter '\Q\'" << endl;
+    cout << "To end the race, enter 'Q'" << endl;
+
+    cout << setw(STATES) << ' ' << endl;
 }
 
-//Loading the array with state names from a file
+// Loading the array with state names from a file.
 bool readFile(string fileName, string Electoral, int e[], string states[])
 {
     ifstream statesData(fileName);
     ifstream electoral(Electoral);
-    if (!statesData && electoral)
+
+    // This should be a logic OR. Check for NOT states OR NOT electoral the return error
+    if (!statesData || !electoral)
     {
         return false;
     }
-    for (int i = 0; i < 50; i++)
+    for (int i = ZERO; i < STATES; i++)
     {
         getline(statesData, states[i]);
         electoral >> e[i];
@@ -39,13 +55,15 @@ bool readFile(string fileName, string Electoral, int e[], string states[])
     }
     return true;
 }
+// Allows user to select a select a state from the file.
 void SelectState(int e[], string s[], int u[])
 {
     string choices;
-    int count = 0;
-    cout << "Please select a state: ", cin >> choices;
-    //getline(cin, choices);
-    for (int line = 0; line < STATES; line++)
+    int count = ZERO;
+    cout << "Please select a state: ";
+    //cin >> choices;
+    getline(cin, choices);
+    for (int line = ZERO; line < STATES; line++)
     {
         if (s[line] == choices)
         {
@@ -58,15 +76,16 @@ void SelectState(int e[], string s[], int u[])
     }
 
     u[count] += e[count];
-    e[count] = 0;
+    e[count] = ZERO;
 
 }
+// Calculates the total of votes the User and Opponent have.
 void Total_Electoral(int e[], string s[], int u[])
 {
     int Points_User = {};
     int Opponents_Points = {};
     int Total = {};
-    for (int row = 0; row < STATES; row++)
+    for (int row = ZERO; row < STATES; row++)
     {
         Points_User += u[row];
         Opponents_Points += e[row];
@@ -87,25 +106,29 @@ void Total_Electoral(int e[], string s[], int u[])
         cout << "You are currently tied. You have " << Points_User << " and your opponent has " << Opponents_Points << " votes." << endl;
     }
 }
+
+// Displays the current User total.
 void User_Total(int u[])
 {
     int Total = {};
-    for (int row = 0; row < STATES; row++)
+    for (int row = ZERO; row < STATES; row++)
     {
         Total += u[row];
     }
     cout << "You currently have a total of: " << Total << " votes." << endl;
 }
 
+// Displays the current Opponent Total.
 void OTotal(int e[])
 {
     int Total = {};
-    for (int row = 0; row < STATES; row++)
+    for (int row = ZERO; row < STATES; row++)
     {
         Total += e[row];
     }
     cout << "Your opponent currently has a total of: " << Total << " votes." << endl;
 }
+
 int main(int argc, char* argv[])
 {
     string choice;
@@ -125,7 +148,9 @@ int main(int argc, char* argv[])
     readFile("ListofStates.txt", "electoral.txt", Electoral, StateList);
     while (choice != QUIT && choice != lower_QUIT)
     {
-        cout << "Please make a selection: ", cin >> choice;
+        cout << "Please make a selection: ";
+        //cin >> choice;
+        getline(cin, choice);
 
         if (choice == StateChoice || choice == lower_StateChoice)
         {
@@ -142,6 +167,10 @@ int main(int argc, char* argv[])
         else if (choice == Opponent || choice == lower_Opponent)
         {
             OTotal(Electoral);
+        }
+        else
+        {
+            cout << "Please use one of the choices" << endl;
         }
     }
 }
